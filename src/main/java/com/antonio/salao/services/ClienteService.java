@@ -3,10 +3,13 @@ package com.antonio.salao.services;
 import com.antonio.salao.domain.dto.ClienteRequestDTO;
 import com.antonio.salao.domain.dto.ClienteResponseDTO;
 import com.antonio.salao.domain.entities.Cliente;
+import com.antonio.salao.exceptions.RecursoNaoEncontradoException;
 import com.antonio.salao.exceptions.RegraNegocioException;
 import com.antonio.salao.repositories.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +40,24 @@ public class ClienteService {
                 cliente.getTelefone(),
                 cliente.getEmail()
         );
+    }
+
+    //listar
+    public List<ClienteResponseDTO> listar(){
+        return repository.findAll().stream().map(
+                cliente -> new ClienteResponseDTO(
+                        cliente.getId(),
+                        cliente.getNome(),
+                        cliente.getTelefone(),
+                        cliente.getEmail())
+                ).toList();
+
+    }
+
+    // Buscar por Id
+    public ClienteResponseDTO buscarPorId(Long id){
+        Cliente cliente = repository
+                .findById(id)
+                .orElseThrow(()-> new RecursoNaoEncontradoException("Cliente não encontrado"));
     }
 }
