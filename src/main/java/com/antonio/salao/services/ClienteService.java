@@ -59,5 +59,12 @@ public class ClienteService {
         Cliente cliente = repository
                 .findById(id)
                 .orElseThrow(()-> new RecursoNaoEncontradoException("Cliente não encontrado"));
+
+        return new ClienteResponseDTO(
+                cliente.getId(),
+                cliente.getNome(),
+                cliente.getTelefone(),
+                cliente.getEmail()
+        );
     }
 }
